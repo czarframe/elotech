@@ -1,10 +1,8 @@
 package com.cesar.elotech.domain;
 
 import com.cesar.elotech.annotation.DataNascimento;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -43,6 +43,11 @@ public class Pessoa implements Serializable {
     @DataNascimento
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataNascimento;
+
+    @NotNull
+    @OneToMany
+    @JsonManagedReference
+    private List<Contato> contatos = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

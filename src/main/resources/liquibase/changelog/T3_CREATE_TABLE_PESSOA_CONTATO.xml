@@ -6,24 +6,25 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
     <changeSet id="1" author="cesar">
-        <preConditions onFail="MARK_RAN" onFailMessage="Já existe a tabela CONTATO">
+        <preConditions onFail="MARK_RAN" onFailMessage="Já existe a tabela PESSOA_CONTATOS">
             <not>
-                <tableExists tableName="CONTATO"/>
+                <tableExists tableName="PESSOA_CONTATOS"/>
             </not>
         </preConditions>
 
-        <createTable tableName="CONTATO">
+        <createTable tableName="PESSOA_CONTATOS">
 
             <column name="ID" autoIncrement="true" type="int">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CONTATO"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_PESSOA_CONTATOS"/>
             </column>
             <column name="PESSOA_ID" type="int">
-                <constraints nullable="true" foreignKeyName="FK_PESSOA" referencedTableName="PESSOA"
+                <constraints nullable="false" foreignKeyName="FK_PESSOA_CONTATOS_PESSOA" referencedTableName="PESSOA"
                              referencedColumnNames="ID"/>
             </column>
-            <column name="NOME" type="VARCHAR(100)"/>
-            <column name="EMAIL" type="VARCHAR(100)"/>
-            <column name="TELEFONE" type="VARCHAR(12)"/>
+            <column name="CONTATOS_ID" type="int">
+                <constraints nullable="false" foreignKeyName="FK_PESSOA_CONTATOS_CONTATO" referencedTableName="CONTATO"
+                             referencedColumnNames="ID"/>
+            </column>
 
         </createTable>
 

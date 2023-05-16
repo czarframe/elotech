@@ -1,15 +1,14 @@
 package com.cesar.elotech.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.validation.annotation.Validated;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -17,6 +16,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Validated
 
 @Entity
 public class Contato implements Serializable {
@@ -36,6 +36,11 @@ public class Contato implements Serializable {
     @NotNull
     @Email
     private String email;
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "pessoa_id")
+    private Pessoa pessoa;
 
     @Override
     public boolean equals(Object o) {

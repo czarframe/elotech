@@ -1,5 +1,6 @@
 package com.cesar.elotech.controller;
 
+import com.cesar.elotech.domain.Contato;
 import com.cesar.elotech.domain.Pessoa;
 import com.cesar.elotech.service.PessoaService;
 import com.cesar.elotech.service.exception.DatabaseException;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/pessoas")
@@ -61,5 +63,11 @@ public class PessoaController {
         } catch (DatabaseException e) {
             throw new DatabaseException(e.getMessage());
         }
+    }
+
+    @GetMapping(value = "/{id}/contatos")
+    public ResponseEntity<List<Contato>> findContatos(@PathVariable Long id) {
+        Pessoa obj = service.findById(id);
+        return ResponseEntity.ok().body(obj.getContatos());
     }
 }

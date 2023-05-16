@@ -1,6 +1,7 @@
 package com.cesar.elotech.controller;
 
 import com.cesar.elotech.domain.Contato;
+import com.cesar.elotech.domain.Pessoa;
 import com.cesar.elotech.service.ContatoService;
 import com.cesar.elotech.service.PessoaService;
 import io.restassured.http.ContentType;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+
+import java.time.LocalDate;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.standaloneSetup;
@@ -59,6 +62,55 @@ public class ContatoControllerTest {
     }
 
     @Test
+    public void insertPessoaContato_Ok() {
+        Pessoa pessoa = new Pessoa();
+        pessoa.setId(1L);
+        pessoa.setNome("David Gilmour");
+        pessoa.setCpf("13012331026");
+        pessoa.setDataNascimento(LocalDate.of(1946, 03, 06));
+
+        Contato contato = new Contato();
+        contato.setId(1L);
+        contato.setNome("Roger Waters");
+        contato.setTelefone("1140028922");
+        contato.setEmail("waters@gmail.com");
+        contato.setPessoa(pessoa);
+
+        pessoa.getContatos().add(contato);
+        contato.setPessoa(pessoa);
+
+        when(pessoaService.insert(pessoa)).thenReturn(pessoa);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(pessoa)
+                .when()
+                .post("/pessoas")
+                .then()
+                .statusCode(HttpStatus.CREATED.value())
+                .header("Location", containsString("/pessoas/" + pessoa.getId()));
+
+        Contato novoContato = new Contato();
+        novoContato.setId(2L);
+        novoContato.setNome("Roger Waters");
+        novoContato.setTelefone("1140028922");
+        novoContato.setEmail("waters@gmail.com");
+        novoContato.setPessoa(pessoa);
+
+        when(contatoService.insert(novoContato)).thenReturn(novoContato);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(novoContato)
+                .when()
+                .post("/contatos")
+                .then()
+                .statusCode(HttpStatus.CREATED.value())
+                .header("Location", containsString("/contatos/" + novoContato.getId()));
+
+    }
+
+    @Test
     public void findById_Ok() {
         Contato contato = new Contato();
         contato.setId(1L);
@@ -100,6 +152,45 @@ public class ContatoControllerTest {
         contato.setNome("Roger Waters");
         contato.setTelefone("1140028922");
         contato.setEmail("waters@gmail.com");
+
+        when(contatoService.findById(contato.getId())).thenReturn(contato);
+
+        given()
+                .accept(ContentType.JSON)
+                .when()
+                .delete("/contatos/{id}", contato.getId())
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    public void deletePessoaContato_ok() {
+        Pessoa pessoa = new Pessoa();
+        pessoa.setId(1L);
+        pessoa.setNome("David Gilmour");
+        pessoa.setCpf("13012331026");
+        pessoa.setDataNascimento(LocalDate.of(1946, 03, 06));
+
+        Contato contato = new Contato();
+        contato.setId(1L);
+        contato.setNome("Roger Waters");
+        contato.setTelefone("1140028922");
+        contato.setEmail("waters@gmail.com");
+        contato.setPessoa(pessoa);
+
+        pessoa.getContatos().add(contato);
+        contato.setPessoa(pessoa);
+
+        when(pessoaService.insert(pessoa)).thenReturn(pessoa);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(pessoa)
+                .when()
+                .post("/pessoas")
+                .then()
+                .statusCode(HttpStatus.CREATED.value())
+                .header("Location", containsString("/pessoas/" + pessoa.getId()));
 
         when(contatoService.findById(contato.getId())).thenReturn(contato);
 

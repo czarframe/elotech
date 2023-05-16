@@ -1,7 +1,11 @@
 package com.cesar.elotech.service;
 
 import com.cesar.elotech.domain.Contato;
+import com.cesar.elotech.domain.Pessoa;
+import com.cesar.elotech.domain.PessoaContato;
 import com.cesar.elotech.repository.ContatoRepository;
+import com.cesar.elotech.repository.PessoaContatoRepository;
+import com.cesar.elotech.repository.PessoaRepository;
 import com.cesar.elotech.service.exception.DatabaseException;
 import com.cesar.elotech.service.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,6 +24,12 @@ public class ContatoService {
     @Autowired
     private ContatoRepository repository;
 
+    @Autowired
+    private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private PessoaContatoRepository pessoaContatoRepository;
+
     public Page<Contato> findAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
@@ -30,7 +40,15 @@ public class ContatoService {
     }
 
     public Contato insert(Contato obj) {
-        return repository.save(obj);
+        Contato contatoSalvo = repository.save(obj);
+        Pessoa pessoa = obj.getPessoa();
+        if (pessoa != null && pessoaRepository.findById(pessoa.getId()).isPresent()) {
+            PessoaContato pessoaContato = new PessoaContato();
+            pessoaContato.setPessoa(pessoa);
+            pessoaContato.setContato(obj);
+            pessoaContatoRepository.save(pessoaContato);
+        }
+        return contatoSalvo;
     }
 
     public Contato update(Long id, Contato obj) {
@@ -51,6 +69,9 @@ public class ContatoService {
 
     public void delete(Long id) {
         try {
+            if (pessoaContatoRepository.findByContatoId(id) != null) {
+                pessoaContatoRepository.deleteById(id);
+            }
             repository.findById(id);
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {

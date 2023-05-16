@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="2" author="cesar">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="CONTATO"/>
+                <tableExists tableName="PESSOA"/>
+                <tableExists tableName="PESSOA_CONTATOS"/>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO PESSOA (NOME, CPF, DATA_NASCIMENTO)
+            VALUES ('David Gilmour', '12345678901', '1990-01-01'),
+                   ('Roger Waters', '23456789012', '1990-02-02'),
+                   ('John Lennon', '34567890123', '1990-03-03'),
+                   ('Freddie Mercury', '45678901234', '1990-04-04'),
+                   ('Jimi Hendrix', '56789012345', '1990-05-05'),
+                   ('Eric Clapton', '67890123456', '1990-06-06'),
+                   ('Robert Plant', '78901234567', '1990-07-07'),
+                   ('Mick Jagger', '89012345678', '1990-08-08'),
+                   ('Elvis Presley', '90123456789', '1990-09-09'),
+                   ('Bob Marley', '01234567890', '1990-10-10');
+
+            INSERT INTO CONTATO (PESSOA_ID, NOME, EMAIL, TELEFONE)
+            VALUES (1, 'Roger Waters', 'contato1@example.com', '1111111111'),
+                   (2, 'Eric Clapton', 'contato2@example.com', '2222222222'),
+                   (3, 'David Gilmour', 'contato3@example.com', '3333333333'),
+                   (4, 'John Lennon', 'contato4@example.com', '4444444444'),
+                   (5, 'Mick Jagger', 'contato5@example.com', '5555555555'),
+                   (6, 'Elvis Presley', 'contato6@example.com', '6666666666'),
+                   (7, 'Freddie Mercury', 'contato7@example.com', '7777777777'),
+                   (8, 'Robert Plant', 'contato8@example.com', '8888888888'),
+                   (9, 'Bob Marley', 'contato9@example.com', '9999999999'),
+                   (10, 'Jim Morrison', 'contato10@example.com', '1010101010');
+
+            INSERT INTO PESSOA_CONTATOS (PESSOA_ID, CONTATOS_ID)
+            VALUES (1, 1),
+                   (2, 2),
+                   (3, 3),
+                   (4, 4),
+                   (5, 5),
+                   (6, 6),
+                   (7, 7),
+                   (8, 8),
+                   (9, 9),
+                   (10, 10);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

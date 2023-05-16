@@ -1,7 +1,7 @@
 package com.cesar.elotech.controller;
 
-import com.cesar.elotech.domain.Pessoa;
-import com.cesar.elotech.service.PessoaService;
+import com.cesar.elotech.domain.Contato;
+import com.cesar.elotech.service.ContatoService;
 import com.cesar.elotech.service.exception.DatabaseException;
 import com.cesar.elotech.service.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
@@ -15,21 +15,21 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping(value = "/pessoas")
-public class PessoaController {
+@RequestMapping(value = "/contatos")
+public class ContatoController {
 
     @Autowired
-    private PessoaService service;
+    private ContatoService service;
 
     @GetMapping
-    public ResponseEntity<Page<Pessoa>> findAll(Pageable pageable) {
-        Page<Pessoa> pages = service.findAll(pageable);
+    public ResponseEntity<Page<Contato>> findAll(Pageable pageable) {
+        Page<Contato> pages = service.findAll(pageable);
         return ResponseEntity.ok().body(pages);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Pessoa> findById(@PathVariable Long id) {
-        Pessoa obj = service.findById(id);
+    public ResponseEntity<Contato> findById(@PathVariable Long id) {
+        Contato obj = service.findById(id);
         if (obj == null) {
             throw new ResourceNotFoundException(id);
         }
@@ -37,14 +37,14 @@ public class PessoaController {
     }
 
     @PostMapping
-    public ResponseEntity<Pessoa> insert(@RequestBody @Valid Pessoa obj) {
+    public ResponseEntity<Contato> insert(@RequestBody @Valid Contato obj) {
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Pessoa> update(@PathVariable Long id, @RequestBody @Valid Pessoa obj) {
+    public ResponseEntity<Contato> update(@PathVariable Long id, @RequestBody @Valid Contato obj) {
         obj = service.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
@@ -52,7 +52,7 @@ public class PessoaController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {
-            Pessoa obj = service.findById(id);
+            Contato obj = service.findById(id);
             if (obj == null) {
                 throw new ResourceNotFoundException(id);
             }

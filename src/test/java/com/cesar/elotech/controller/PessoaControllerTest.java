@@ -1,6 +1,7 @@
 package com.cesar.elotech.controller;
 
 import com.cesar.elotech.domain.Pessoa;
+import com.cesar.elotech.service.ContatoService;
 import com.cesar.elotech.service.PessoaService;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,12 +24,18 @@ public class PessoaControllerTest {
     @Autowired
     private PessoaController pessoaController;
 
+    @Autowired
+    private ContatoController contatoController;
+
     @MockBean
     private PessoaService pessoaService;
 
+    @MockBean
+    private ContatoService contatoService;
+
     @BeforeEach
     public void setUp() {
-        standaloneSetup(this.pessoaController);
+        standaloneSetup(this.pessoaController, this.contatoController);
     }
 
     @Test

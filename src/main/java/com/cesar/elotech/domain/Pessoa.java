@@ -4,6 +4,7 @@ import com.cesar.elotech.annotation.DataNascimento;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,7 @@ public class Pessoa implements Serializable {
     @NotNull
     @OneToMany
     @JsonManagedReference
+    @Size(min = 1)
     private List<Contato> contatos = new ArrayList<>();
 
     @Override
